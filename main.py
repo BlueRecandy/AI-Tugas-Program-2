@@ -31,16 +31,19 @@ def write_luaran():
     luaran_file = openpyxl.Workbook()
     luaran_sheet = luaran_file.active
 
-    for i in range(1, len(data_luaran) + 1):
-        resto_obj = data_luaran[i]
-        row = (1 + i)
-        luaran_sheet[f'A{row}'] = i
+    luaran_sheet['A1'] = 'ID'
+    luaran_sheet['B1'] = 'Nama Tempat Makan'
+    luaran_sheet['C1'] = 'TOR'
+
+    for index in range(1, len(data_luaran) + 1):
+        resto_obj = data_luaran[index]
+        row = (1 + index)
+        luaran_sheet[f'A{row}'] = index
         luaran_sheet[f'B{row}'] = resto_obj['nama_toko']
         luaran_sheet[f'C{row}'] = resto_obj['TOR']
 
-    luaran_file.close()
     luaran_file.save('luaran.xlsx')
-    return
+    luaran_file.close()
 
 
 # Attribute Grouping:

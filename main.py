@@ -8,6 +8,20 @@ data_luaran = {}
 
 
 # TODO Baca data dari file masukan.xls
+path = "masukan.xlsx"
+ 
+# workbook object is created
+wb_obj = openpyxl.load_workbook(path)
+ 
+sheet_obj = wb_obj.active
+ 
+max_col = sheet_obj.max_column
+ 
+# Will print a particular row value
+for i in range(1, max_col + 1):
+    cell_obj = sheet_obj.cell(row = 2, column = i)
+    print(cell_obj.value, end = " ")
+
 def read_masukan(self):
     return
 
@@ -26,7 +40,7 @@ def write_luaran(self):
 # Rata-rata Harga:
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
-#   - Murah       : < 20 ribu
+#   - Kurang Enak       : < 20 ribu
 #
 # Jumlah Menu:
 #   - Sangat Variatif   : > 17 menu

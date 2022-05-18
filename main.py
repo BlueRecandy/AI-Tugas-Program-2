@@ -55,11 +55,11 @@ def write_luaran():
 # Rata-rata Harga:
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
-#   - Kurang Enak       : < 20 ribu
+#   - Murah       : < 20 ribu
 #
 # Jumlah Menu:
-#   - Sangat Variatif   : > 17 menu
-#   - Variatif          : > 5 - 20 menu
+#   - Sangat Variatif   : > 33 menu
+#   - Variatif          : > 5 - 35 menu
 #   - Kurang Variatif   : < 7
 
 # TODO fungsi fuzzifikasi disini

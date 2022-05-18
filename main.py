@@ -26,7 +26,7 @@ def write_luaran(self):
 # Rata-rata Harga:
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
-#   - Kurang Enak       : < 20 ribu
+#   - Murah       : < 20 ribu
 #
 # Jumlah Menu:
 #   - Sangat Variatif   : > 17 menu

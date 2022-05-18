@@ -27,7 +27,19 @@ def read_masukan(self):
 
 
 # TODO Tulis data hasil olahan observasi ke file luaran.xls
-def write_luaran(self):
+def write_luaran():
+    luaran_file = openpyxl.Workbook()
+    luaran_sheet = luaran_file.active
+
+    for i in range(1, len(data_luaran) + 1):
+        resto_obj = data_luaran[i]
+        row = (1 + i)
+        luaran_sheet[f'A{row}'] = i
+        luaran_sheet[f'B{row}'] = resto_obj['nama_toko']
+        luaran_sheet[f'C{row}'] = resto_obj['TOR']
+
+    luaran_file.close()
+    luaran_file.save('luaran.xlsx')
     return
 
 
@@ -64,4 +76,4 @@ def defuzzification(self):
 
 
 if __name__ == '__main__':
-    print('hello')
+    write_luaran()

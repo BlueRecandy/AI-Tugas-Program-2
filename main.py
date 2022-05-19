@@ -6,6 +6,7 @@ data_masukan = {}
 # Buat nyimpen data yang nanti disimpan di luaran.xls
 data_luaran = {}
 
+
 # TODO Baca data dari file masukan.xls
 def read_masukan():
     wb = openpyxl.load_workbook("masukan.xlsx")
@@ -14,10 +15,10 @@ def read_masukan():
     for row in sheet.iter_rows(min_row=2, max_row=101, min_col=1, values_only=True):
         id = row[0]
         masukan = {
-            "Nama tempat makan" : row[2],
-            "Rating" : row[4],
-            "Jumlah menu" : row[3],
-            "Harga rata-rata" : row[6],
+            "nama_tempat_makan": row[2],
+            "rating": row[4],
+            "jumlah_menu": row[3],
+            "harga_rata_rata": row[6],
         }
         data_masukan[id] = masukan
     wb.close()
@@ -69,15 +70,17 @@ def fuzzification():
         jumlah_menu = resto_obj['jumlah_menu']
         harga_rata_rata = resto_obj['harga_rata_rata']
 
-        print('-'*10)
+        print('-' * 10)
         # TODO Calculate attribute
         print('-' * 10)
     return
+
 
 # TODO fungsi inference disini
 # contoh di slide halaman 55-57
 def inference(self):
     return
+
 
 # TODO fungsi defuzzifikasi disini
 # contoh di slide halaman 58

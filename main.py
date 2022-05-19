@@ -12,8 +12,6 @@ def read_masukan():
     wb = load_workbook("masukan.xlsx")
     sheet = wb['Sheet1']
 
-    data_masukan = {}
-
     for row in sheet.iter_rows(min_row=2, max_row=101, min_col=1, values_only=True):
         id = row[0]
         masukan = {
@@ -27,8 +25,23 @@ def read_masukan():
 
 read_masukan()
 # TODO Tulis data hasil olahan observasi ke file luaran.xls
-def write_luaran(self):
-    return
+def write_luaran():
+    luaran_file = openpyxl.Workbook()
+    luaran_sheet = luaran_file.active
+
+    luaran_sheet['A1'] = 'ID'
+    luaran_sheet['B1'] = 'Nama Tempat Makan'
+    luaran_sheet['C1'] = 'TOR'
+
+    for index in range(1, len(data_luaran) + 1):
+        resto_obj = data_luaran[index]
+        row = (1 + index)
+        luaran_sheet[f'A{row}'] = index
+        luaran_sheet[f'B{row}'] = resto_obj['nama_toko']
+        luaran_sheet[f'C{row}'] = resto_obj['TOR']
+
+    luaran_file.save('luaran.xlsx')
+    luaran_file.close()
 
 
 # Attribute Grouping:
@@ -40,11 +53,11 @@ def write_luaran(self):
 # Rata-rata Harga:
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
-#   - Kurang Enak       : < 20 ribu
+#   - Murah       : < 20 ribu
 #
 # Jumlah Menu:
-#   - Sangat Variatif   : > 17 menu
-#   - Variatif          : > 5 - 20 menu
+#   - Sangat Variatif   : > 33 menu
+#   - Variatif          : > 5 - 35 menu
 #   - Kurang Variatif   : < 7
 
 # TODO fungsi fuzzifikasi disini
@@ -64,5 +77,5 @@ def defuzzification(self):
 
 
 if __name__ == '__main__':
-    print('hello')
-
+    read_masukan()
+    write_luaran()

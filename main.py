@@ -1,5 +1,4 @@
-import json
-from openpyxl import load_workbook
+import openpyxl
 
 # Buat nyimpen data dari file masukan.xls
 data_masukan = {}
@@ -9,7 +8,7 @@ data_luaran = {}
 
 # TODO Baca data dari file masukan.xls
 def read_masukan():
-    wb = load_workbook("masukan.xlsx")
+    wb = openpyxl.load_workbook("masukan.xlsx")
     sheet = wb['Sheet1']
 
     for row in sheet.iter_rows(min_row=2, max_row=101, min_col=1, values_only=True):
@@ -21,9 +20,9 @@ def read_masukan():
             "Harga rata-rata" : row[6],
         }
         data_masukan[id] = masukan
-        print(json.dumps(data_masukan, indent=3))
+    wb.close()
 
-read_masukan()
+
 # TODO Tulis data hasil olahan observasi ke file luaran.xls
 def write_luaran():
     luaran_file = openpyxl.Workbook()
@@ -62,7 +61,17 @@ def write_luaran():
 
 # TODO fungsi fuzzifikasi disini
 # contoh di slide halaman 54
-def fuzzification(self):
+def fuzzification():
+    for resto_id in data_masukan.keys():
+        resto_obj = data_masukan[resto_id]
+
+        rating = resto_obj['rating']
+        jumlah_menu = resto_obj['jumlah_menu']
+        harga_rata_rata = resto_obj['harga_rata_rata']
+
+        print('-'*10)
+        # TODO Calculate attribute
+        print('-' * 10)
     return
 
 # TODO fungsi inference disini

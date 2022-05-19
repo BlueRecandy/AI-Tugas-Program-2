@@ -37,7 +37,7 @@ def write_luaran():
         resto_obj = data_luaran[index]
         row = (1 + index)
         luaran_sheet[f'A{row}'] = index
-        luaran_sheet[f'B{row}'] = resto_obj['nama_toko']
+        luaran_sheet[f'B{row}'] = resto_obj['nama_tempat_makan']
         luaran_sheet[f'C{row}'] = resto_obj['TOR']
 
     luaran_file.save('luaran.xlsx')

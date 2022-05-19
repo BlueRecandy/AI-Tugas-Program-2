@@ -113,8 +113,38 @@ def fuzzification():
 
 # TODO fungsi inference disini
 # contoh di slide halaman 55-57
-def inference(self):
-    return
+def inference():
+    # Aturan
+    rating = [0, 0, 0, 0, 0]
+    harga = [0, 0, 0, 0, 0]
+    bagus = biasa = buruk = murah = biasa = mahal = 0 
+    oke = [ ]
+    tidak = [ ]
+    
+    if rating == bagus and harga == murah:
+        oke.append(min(harga, rating))
+    elif rating == bagus and harga == biasa:
+        oke.append(min(harga, rating))
+    elif rating == bagus and harga == mahal:
+        oke.append(min(harga, rating))
+    elif rating == biasa and harga == murah:
+        oke.append(min(harga, rating))
+    elif rating == biasa and harga == biasa:
+        tidak.append(min(harga, rating))
+    elif rating == biasa and harga == mahal:
+        tidak.append(min(harga, rating))
+    elif rating == buruk and harga == murah:
+        tidak.append(min(harga, rating))
+    elif rating == buruk and harga == biasa:
+        tidak.append(min(harga, rating))
+    elif rating == buruk and harga == mahal:
+        tidak.append(min(harga, rating))
+
+    # nilai kelayakan disjungsi
+    nk_oke = max(oke)
+    nk_tidak = max(tidak)
+
+    # Conjungtion
 
 
 # TODO fungsi defuzzifikasi disini
@@ -126,3 +156,4 @@ def defuzzification(self):
 if __name__ == '__main__':
     read_masukan()
     print(fuzzification())
+    print(inference())

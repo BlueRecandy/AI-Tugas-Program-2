@@ -1,4 +1,5 @@
-import openpyxl
+import json
+from openpyxl import load_workbook
 
 # Buat nyimpen data dari file masukan.xls
 data_masukan = {}
@@ -6,26 +7,25 @@ data_masukan = {}
 # Buat nyimpen data yang nanti disimpan di luaran.xls
 data_luaran = {}
 
-
 # TODO Baca data dari file masukan.xls
-path = "masukan.xlsx"
- 
-# workbook object is created
-wb_obj = openpyxl.load_workbook(path)
- 
-sheet_obj = wb_obj.active
- 
-max_col = sheet_obj.max_column
- 
-# Will print a particular row value
-for i in range(1, max_col + 1):
-    cell_obj = sheet_obj.cell(row = 2, column = i)
-    print(cell_obj.value, end = " ")
+def read_masukan():
+    wb = load_workbook("masukan.xlsx")
+    sheet = wb['Sheet1']
 
-def read_masukan(self):
-    return
+    data_masukan = {}
 
+    for row in sheet.iter_rows(min_row=2, max_row=101, min_col=1, values_only=True):
+        id = row[0]
+        masukan = {
+            "Nama tempat makan" : row[2],
+            "Rating" : row[4],
+            "Jumlah menu" : row[3],
+            "Harga rata-rata" : row[6],
+        }
+        data_masukan[id] = masukan
+        print(json.dumps(data_masukan, indent=3))
 
+read_masukan()
 # TODO Tulis data hasil olahan observasi ke file luaran.xls
 def write_luaran(self):
     return
@@ -65,3 +65,4 @@ def defuzzification(self):
 
 if __name__ == '__main__':
     print('hello')
+

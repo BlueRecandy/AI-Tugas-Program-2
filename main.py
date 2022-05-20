@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+from unicodedata import category
 import openpyxl
 
 # Buat nyimpen data dari file masukan.xls
@@ -164,20 +166,20 @@ def fuzzification():
     return fuzzy_result
 
 
-def attribute_range_filter(categories: list[str], category_sets: dict):
-    filtered = {}
+def attribute_range_filter(value: float, categories: list[str], category_sets: dict):
+    filter = {}
 
     if len(categories) == 1:
         category = categories[0]
-        filtered['lower'] = category_sets[category]['lower']
-        filtered['upper'] = category_sets[category]['upper']
+        filter['lower'] = category_sets[category]['lower']
+        filter['upper'] = category_sets[category]['upper']
     elif len(categories) == 2:
         category_1 = categories[0]
         category_2 = categories[1]
-        filtered['lower'] = category_sets[category_1]['lower']
-        filtered['upper'] = category_sets[category_2]['upper']
+        filter['lower'] = category_sets[category_1]['lower']
+        filter['upper'] = category_sets[category_2]['upper']
 
-    return filtered
+    return filter
 
 
 def fuzzification_v2():
@@ -189,7 +191,7 @@ def fuzzification_v2():
         harga = resto_obj['harga_rata_rata']
 
         rating_categories = get_category_sets(rating, rating_sets)
-        rating_filter = attribute_range_filter(rating_categories, rating_sets)
+        rating_filter = attribute_range_filter(rating, rating_categories, rating_sets)
         rating_result_values = calc_group_v2(rating, rating_categories, rating_filter['lower'], rating_filter['upper'])
         rating_result = {
             'value': rating,
@@ -204,7 +206,7 @@ def fuzzification_v2():
         }
 
         harga_categories = get_category_sets(harga, harga_sets)
-        harga_filter = attribute_range_filter(harga_categories, harga_sets)
+        harga_filter = attribute_range_filter(harga, harga_categories, harga_sets)
         harga_result_values = calc_group_v2(harga, harga_categories, harga_filter['lower'], harga_filter['upper'])
         harga_result = {
             'value': harga,
@@ -223,6 +225,7 @@ def fuzzification_v2():
             'harga': harga_result
         }
 
+
         fuzzy_result[resto_id] = resto_fuzzy
 
     return fuzzy_result
@@ -230,15 +233,49 @@ def fuzzification_v2():
 
 # TODO fungsi inference disini
 # contoh di slide halaman 55-57
-def inference(fuzzy_result):
-    # Loop tiap resto
+def inference(fuzzy_result: dict):
+
+    # Loop tiap restoo
+    for resto_id in data_masukan.keys():
+        resto_obj = fuzzy_result[resto_id]
+
     # Ambil attribut rating dan harga dari tiap resto
+        rating = resto_obj['rating']
+        harga = resto_obj['harga']
+
     # Ambil semua kategori yang ada dari rating dan harga
+        list_rating_kategori = rating['range']['category']
+        list_harga_kategori = harga['range']['category']
+
     # Pasangkan kategori rating dan harga
+        for kategori_rating in list_rating_kategori:
+            for kategori_harga in list_harga_kategori:
+
     # Lakukan rule dari NK
+                oke = []
+                tidak = []
+                if kategori_rating == "Bagus" and kategori_harga == "Murah":
+                    oke = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Bagus" and kategori_harga == "Diterima":
+                    oke = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Bagus" and kategori_harga == "Mahal":
+                    oke = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Biasa" and kategori_harga == "Murah":
+                    oke = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Biasa" and kategori_harga == "Diterima":
+                    tidak = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Biasa" and kategori_harga == "Mahal":
+                    tidak = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Buruk" and kategori_harga == "Murah":
+                    tidak = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Buruk" and kategori_harga == "Diterima":
+                    tidak = min(kategori_rating, kategori_harga)
+                if kategori_rating == "Buruk" and kategori_harga == "Mahal":
+                    tidak = min(kategori_rating, kategori_harga)
 
-    return
-
+    # hasil 
+        nk_oke = max(oke)
+        nk_tidak = max(tidak)
 
 # TODO fungsi defuzzifikasi disini
 # contoh di slide halaman 58

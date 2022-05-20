@@ -65,7 +65,7 @@ menu_groups = [150, 35, 33, 7, 5, 1]
 harga_groups = [100000, 55000, 50000, 20000, 15000, 0]
 
 rating_sets = {
-    'Enak': {
+    'Bagus': {
         'upper': 5,
         'lower': 3.7
     },
@@ -73,7 +73,7 @@ rating_sets = {
         'upper': 4,
         'lower': 2
     },
-    'Kurang': {
+    'Buruk': {
         'upper': 2.3,
         'lower': 0
     }
@@ -164,20 +164,20 @@ def fuzzification():
     return fuzzy_result
 
 
-def attribute_range_filter(value: float, categories: list[str], category_sets: dict):
-    filter = {}
+def attribute_range_filter(categories: list[str], category_sets: dict):
+    filtered = {}
 
     if len(categories) == 1:
         category = categories[0]
-        filter['lower'] = category_sets[category]['lower']
-        filter['upper'] = category_sets[category]['upper']
+        filtered['lower'] = category_sets[category]['lower']
+        filtered['upper'] = category_sets[category]['upper']
     elif len(categories) == 2:
         category_1 = categories[0]
         category_2 = categories[1]
-        filter['lower'] = category_sets[category_1]['lower']
-        filter['upper'] = category_sets[category_2]['upper']
+        filtered['lower'] = category_sets[category_1]['lower']
+        filtered['upper'] = category_sets[category_2]['upper']
 
-    return filter
+    return filtered
 
 
 def fuzzification_v2():
@@ -189,7 +189,7 @@ def fuzzification_v2():
         harga = resto_obj['harga_rata_rata']
 
         rating_categories = get_category_sets(rating, rating_sets)
-        rating_filter = attribute_range_filter(rating, rating_categories, rating_sets)
+        rating_filter = attribute_range_filter(rating_categories, rating_sets)
         rating_result_values = calc_group_v2(rating, rating_categories, rating_filter['lower'], rating_filter['upper'])
         rating_result = {
             'value': rating,
@@ -204,7 +204,7 @@ def fuzzification_v2():
         }
 
         harga_categories = get_category_sets(harga, harga_sets)
-        harga_filter = attribute_range_filter(harga, harga_categories, harga_sets)
+        harga_filter = attribute_range_filter(harga_categories, harga_sets)
         harga_result_values = calc_group_v2(harga, harga_categories, harga_filter['lower'], harga_filter['upper'])
         harga_result = {
             'value': harga,
@@ -248,4 +248,4 @@ def defuzzification(self):
 
 if __name__ == '__main__':
     read_masukan()
-    print(fuzzification_v2())
+    inference(fuzzification_v2())

@@ -223,9 +223,7 @@ def fuzzification_v2():
             'harga': harga_result
         }
 
-
         fuzzy_result[resto_id] = resto_fuzzy
-        return fuzzy_result
 
     return fuzzy_result
 
@@ -233,7 +231,6 @@ def fuzzification_v2():
 # TODO fungsi inference disini
 # contoh di slide halaman 55-57
 def inference(fuzzy_result):
-
     # Loop tiap resto
     # Ambil attribut rating dan harga dari tiap resto
     # Ambil semua kategori yang ada dari rating dan harga

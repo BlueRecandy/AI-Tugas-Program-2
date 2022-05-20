@@ -230,14 +230,67 @@ def fuzzification_v2():
 
 # TODO fungsi inference disini
 # contoh di slide halaman 55-57
-def inference(fuzzy_result):
-    # Loop tiap resto
-    # Ambil attribut rating dan harga dari tiap resto
-    # Ambil semua kategori yang ada dari rating dan harga
-    # Pasangkan kategori rating dan harga
-    # Lakukan rule dari NK
+def inference(fuzzy_result: dict):
+    inferece_result = {}
 
-    return
+    for resto_id in fuzzy_result.keys():
+        resto_obj = fuzzy_result[resto_id]
+        rating = resto_obj['rating']
+        harga = resto_obj['harga']
+
+        rating_fuzzy = rating['result']
+        harga_fuzzy = harga['result']
+
+        inf_result = []
+
+        for cat_rating in rating_fuzzy:
+            for cat_harga in harga_fuzzy:
+                cat_rating_value = rating_fuzzy[cat_rating]
+                cat_harga_value = harga_fuzzy[cat_harga]
+
+                if cat_rating == 'Bagus' and cat_harga == 'Murah':
+                    inf = {'category': 'Oke', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Bagus' and cat_harga == 'Diterima':
+                    inf = {'category': 'Oke', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Bagus' and cat_harga == 'Mahal':
+                    inf = {'category': 'Oke', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Biasa' and cat_harga == 'Murah':
+                    inf = {'category': 'Oke', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Biasa' and cat_harga == 'Diterima':
+                    inf = {'category': 'Tidak', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Biasa' and cat_harga == 'Mahal':
+                    inf = {'category': 'Tidak', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Buruk' and cat_harga == 'Murah':
+                    inf = {'category': 'Tidak', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Buruk' and cat_harga == 'Diterima':
+                    inf = {'category': 'Tidak', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+                elif cat_rating == 'Buruk' and cat_harga == 'Mahal':
+                    inf = {'category': 'Tidak', 'NK': inference_conjunction(cat_rating_value, cat_harga_value)}
+
+                inf_result.append(inf)
+        inferece_result[resto_id] = inference_disjunction(inf_result)
+
+    return inferece_result
+
+
+def inference_conjunction(rating_value: float, harga_value: float):
+    return min(rating_value, harga_value)
+
+
+def inference_disjunction(inf_result: list[dict]):
+    result: dict = {}
+
+    for i in range(0, len(inf_result)):
+        cat_obj = inf_result[i]
+        category = cat_obj['category']
+        nk = cat_obj['NK']
+
+        if category in result:
+            result[category] = max(nk, result[category])
+        else:
+            result[category] = nk
+
+    return result
 
 
 # TODO fungsi defuzzifikasi disini
@@ -248,4 +301,4 @@ def defuzzification(self):
 
 if __name__ == '__main__':
     read_masukan()
-    inference(fuzzification_v2())
+    print(inference(fuzzification_v2()))

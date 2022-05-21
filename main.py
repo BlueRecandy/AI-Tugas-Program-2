@@ -31,14 +31,15 @@ def write_luaran():
 
     luaran_sheet['A1'] = 'ID'
     luaran_sheet['B1'] = 'Nama Tempat Makan'
-    luaran_sheet['C1'] = 'TOR'
+    luaran_sheet['C1'] = 'NK'
 
-    for index in range(1, len(data_luaran) + 1):
+    row = 1
+    for index in data_luaran:
         resto_obj = data_luaran[index]
-        row = (1 + index)
+        row += 1
         luaran_sheet[f'A{row}'] = index
         luaran_sheet[f'B{row}'] = resto_obj['nama_tempat_makan']
-        luaran_sheet[f'C{row}'] = resto_obj['TOR']
+        luaran_sheet[f'C{row}'] = resto_obj['NK']
 
     luaran_file.save('luaran.xlsx')
     luaran_file.close()
@@ -93,6 +94,17 @@ harga_sets = {
         'lower': 0
     },
 
+}
+
+label_sets = {
+    'Oke': {
+        'upper': 1,
+        'lower': 4 / 9
+    },
+    'Tidak': {
+        'lower': 0,
+        'upper': 5 / 9
+    }
 }
 
 
@@ -295,10 +307,87 @@ def inference_disjunction(inf_result: list[dict]):
 
 # TODO fungsi defuzzifikasi disini
 # contoh di slide halaman 58
-def defuzzification(self):
-    return
+def defuzzification(inference_result: dict):
+    deffuzzi_result = {}
+    for resto_id in data_masukan.keys():
+        resto_inference: dict = inference_result[resto_id]
+        label_categories = list(resto_inference.keys())
 
+        top_section = 0
+        bottom_section = 0
+        for label_result in resto_inference:
+            label_inf_value = resto_inference[label_result]
+            label_ranges = attribute_range_filter(label_categories, label_sets)
+
+            ten_area_floor, ten_area_ceil = get_label_ten_area(label_ranges['lower'], label_ranges['upper'])
+            area_amount, area_result = calculate_ten_area(ten_area_floor, ten_area_ceil)
+
+            top, bottom = calculate_pre_deffuzi(label_inf_value, area_result, area_amount)
+
+            top_section += top
+            bottom_section += bottom
+
+        resto_deffuzi = calculate_deffuzi(top_section, bottom_section)*10
+        deffuzzi_result[resto_id] = resto_deffuzi
+    return deffuzzi_result
+
+
+def calculate_deffuzi(top_section: float, bottom_section: float):
+    return top_section / bottom_section
+
+
+def calculate_pre_deffuzi(label_value: float, area_result: float, area_amount: int):
+    top_result = area_result * 10 * label_value
+    bottom_result = label_value * area_amount
+    return top_result, bottom_result
+
+
+def calculate_ten_area(floor: float, ceil: float):
+    increment = 0
+    area_amount: int = 0
+    area_result = 0
+    for i in range(0, 10):
+        if floor <= increment <= ceil:
+            area_result += increment
+        increment += 0.1
+        area_amount += 1
+    return area_amount, area_result
+
+
+def get_label_ten_area(lower: float, upper: float):
+    result_floor = -1
+    result_ceil = -1
+
+    for i in range(0, 10):
+        floor = 0.1 * i
+        ceil = 0.1 * (i + 1)
+
+        if result_floor == -1:
+            if ceil >= lower:
+                result_floor = floor
+        if result_ceil == -1:
+            if ceil >= upper:
+                result_ceil = ceil
+        if result_floor != -1 and result_ceil != -1:
+            break
+
+    return result_floor, result_ceil
+
+
+def sort_by_nk(deffuzification_result: dict[any, float]):
+    return sorted(deffuzification_result, key=deffuzification_result.get, reverse=True)
 
 if __name__ == '__main__':
     read_masukan()
-    print(inference(fuzzification_v2()))
+    fuzzi = fuzzification_v2()
+    infe = inference(fuzzi)
+    deffuzi = defuzzification(infe)
+
+    for i in sort_by_nk(deffuzi):
+        resto_obj = data_masukan[i]
+        data_luaran[i] = {
+            'nama_tempat_makan': resto_obj['nama_tempat_makan'],
+            'NK': deffuzi[i]
+        }
+
+    write_luaran()

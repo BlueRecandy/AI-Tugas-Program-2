@@ -252,30 +252,37 @@ def inference(fuzzy_result: dict):
             for kategori_harga in list_harga_kategori:
 
     # Lakukan rule dari NK
-                oke = []
-                tidak = []
                 if kategori_rating == "Bagus" and kategori_harga == "Murah":
                     oke = min(kategori_rating, kategori_harga)
+                    return oke
                 if kategori_rating == "Bagus" and kategori_harga == "Diterima":
                     oke = min(kategori_rating, kategori_harga)
+                    return oke
                 if kategori_rating == "Bagus" and kategori_harga == "Mahal":
                     oke = min(kategori_rating, kategori_harga)
+                    return oke
                 if kategori_rating == "Biasa" and kategori_harga == "Murah":
                     oke = min(kategori_rating, kategori_harga)
+                    return oke
+                nk_oke = max(oke)
+        
                 if kategori_rating == "Biasa" and kategori_harga == "Diterima":
                     tidak = min(kategori_rating, kategori_harga)
+                    return tidak
                 if kategori_rating == "Biasa" and kategori_harga == "Mahal":
                     tidak = min(kategori_rating, kategori_harga)
+                    return tidak
                 if kategori_rating == "Buruk" and kategori_harga == "Murah":
                     tidak = min(kategori_rating, kategori_harga)
+                    return tidak
                 if kategori_rating == "Buruk" and kategori_harga == "Diterima":
                     tidak = min(kategori_rating, kategori_harga)
+                    return tidak
                 if kategori_rating == "Buruk" and kategori_harga == "Mahal":
                     tidak = min(kategori_rating, kategori_harga)
-
-    # hasil 
-        nk_oke = max(oke)
-        nk_tidak = max(tidak)
+                    return tidak
+                nk_tidak = max(tidak)
+    # hasil     
 
 # TODO fungsi defuzzifikasi disini
 # contoh di slide halaman 58

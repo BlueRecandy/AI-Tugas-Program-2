@@ -54,6 +54,10 @@ def write_luaran():
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
 #   - Murah       : < 20 ribu
+#
+# Label Hasil Tempat Makan:
+#   - Oke               : 1 - 4/9
+#   - Tidak             : 5/9 - 0
 
 rating_sets = {
     'Bagus': {

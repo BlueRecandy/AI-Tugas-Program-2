@@ -61,10 +61,6 @@ def write_luaran():
 #   - Variatif          : > 5 - 35 menu
 #   - Kurang Variatif   : < 7
 
-rating_groups = [5, 4, 3.7, 2.3, 2, 0]
-menu_groups = [150, 35, 33, 7, 5, 1]
-harga_groups = [100000, 55000, 50000, 20000, 15000, 0]
-
 rating_sets = {
     'Bagus': {
         'upper': 5,
@@ -376,6 +372,7 @@ def get_label_ten_area(lower: float, upper: float):
 
 def sort_by_nk(deffuzification_result: dict[any, float]):
     return sorted(deffuzification_result, key=deffuzification_result.get, reverse=True)
+
 
 if __name__ == '__main__':
     read_masukan()

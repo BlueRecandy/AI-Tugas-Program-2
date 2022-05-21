@@ -17,7 +17,6 @@ def read_masukan():
         masukan = {
             "nama_tempat_makan": row[2],
             "rating": row[4],
-            "jumlah_menu": row[3],
             "harga_rata_rata": row[6],
         }
         data_masukan[id] = masukan
@@ -55,11 +54,6 @@ def write_luaran():
 #   - Mahal             : > 50 ribu
 #   - Dapat Diterima    : 15 - 55 ribu
 #   - Murah       : < 20 ribu
-#
-# Jumlah Menu:
-#   - Sangat Variatif   : > 33 menu
-#   - Variatif          : > 5 - 35 menu
-#   - Kurang Variatif   : < 7
 
 rating_sets = {
     'Bagus': {
@@ -116,17 +110,6 @@ def get_category_sets(value: float, sets: dict):
     return sets_area
 
 
-def get_grouping(value: float, groups: list[int]):
-    for i in range(0, len(groups)):
-        a = groups[i]
-        b = groups[i + 1]
-        lower = min(a, b)
-        upper = max(a, b)
-
-        if lower < value <= upper:
-            return lower, upper
-
-
 def calc_group(value: float, lower: float, upper: float):
     low = -(value - upper) / (upper - lower)
     high = (value - lower) / (upper - lower)
@@ -140,36 +123,6 @@ def calc_group_v2(value: float, categories: list, lower: float, upper: float):
         low = -(value - upper) / (upper - lower)
         high = (value - lower) / (upper - lower)
         return {categories[0]: high, categories[1]: low}
-
-
-# TODO fungsi fuzzifikasi disini
-# contoh di slide halaman 54
-def fuzzification():
-    fuzzy_result = {}
-
-    for resto_id in data_masukan.keys():
-        resto_obj = data_masukan[resto_id]
-
-        rating = resto_obj['rating']
-        harga_rata_rata = resto_obj['harga_rata_rata']
-
-        rating_lower, rating_upper = get_grouping(rating, rating_groups)
-        harga_lower, harga_upper = get_grouping(harga_rata_rata, harga_groups)
-
-        rating_fuzzy = calc_group(rating, rating_lower, rating_upper)
-        harga_fuzzy = calc_group(harga_rata_rata, harga_lower, harga_upper)
-
-        rating_result = {'lower': rating_fuzzy[0], 'upper': rating_fuzzy[1]}
-        harga_result = {'lower': harga_fuzzy[0], 'upper': harga_fuzzy[1]}
-
-        result = {
-            'rating': rating_result,
-            'harga': harga_result
-        }
-
-        fuzzy_result[resto_id] = result
-
-    return fuzzy_result
 
 
 def attribute_range_filter(categories: list[str], category_sets: dict):
@@ -188,7 +141,7 @@ def attribute_range_filter(categories: list[str], category_sets: dict):
     return filtered
 
 
-def fuzzification_v2():
+def fuzzification():
     fuzzy_result = {}
 
     for resto_id in data_masukan.keys():
@@ -376,7 +329,7 @@ def sort_by_nk(deffuzification_result: dict[any, float]):
 
 if __name__ == '__main__':
     read_masukan()
-    fuzzi = fuzzification_v2()
+    fuzzi = fuzzification()
     infe = inference(fuzzi)
     deffuzi = defuzzification(infe)
 
